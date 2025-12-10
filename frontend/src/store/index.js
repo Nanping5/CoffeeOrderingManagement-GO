@@ -1,0 +1,12 @@
+import { createPinia } from 'pinia'
+
+// 创建pinia实例
+const pinia = createPinia()
+
+export default pinia
+
+// 导出所有store
+export { useAuthStore } from './auth'
+export { useCartStore } from './cart'
+export { usePointsStore } from './points'
+export { useUserStore } from './user'

@@ -1,0 +1,470 @@
+// ========================================
+// 现代化动画系统
+// ========================================
+
+@import './variables.scss';
+
+// 1. 页面过渡动画
+// ========================================
+.page-enter-active,
+.page-leave-active {
+  transition: all $transition-base $ease-out;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+// 2. 淡入动画
+// ========================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// 3. 缩放动画
+// ========================================
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+// 4. 弹跳动画
+// ========================================
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// 5. 旋转动画
+// ========================================
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-200deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0);
+  }
+}
+
+// 6. 摇晃动画
+// ========================================
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+// 7. 脉冲动画
+// ========================================
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// 8. 闪烁动画
+// ========================================
+@keyframes flash {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+// 9. 数字滚动动画
+// ========================================
+@keyframes numberRoll {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// 10. 加载动画
+// ========================================
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
+
+// 11. 波纹动画
+// ========================================
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+// 12. 渐变背景动画
+// ========================================
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// 13. 浮动动画
+// ========================================
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// 14. 滑入动画
+// ========================================
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// 15. 交错动画类
+// ========================================
+.stagger-item {
+  animation: fadeInUp 0.6s $ease-out both;
+  
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+// 16. 工具类
+// ========================================
+.animate-fade-in {
+  animation: fadeIn $transition-base $ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp $transition-base $ease-out;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown $transition-base $ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn $transition-base $ease-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s $ease-bounce;
+}
+
+.animate-pulse {
+  animation: pulse 2s $ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s $ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+// 17. 悬停动画
+// ========================================
+.hover-lift {
+  transition: transform $transition-base $ease-out;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.hover-scale {
+  transition: transform $transition-base $ease-out;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.hover-rotate {
+  transition: transform $transition-base $ease-out;
+  
+  &:hover {
+    transform: rotate(5deg);
+  }
+}
+
+.hover-glow {
+  transition: box-shadow $transition-base $ease-out;
+  
+  &:hover {
+    box-shadow: 0 0 20px rgba($primary-color, 0.5);
+  }
+}
+
+// 18. 滚动触发动画
+// ========================================
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s $ease-out;
+  
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s $ease-out;
+  
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.8s $ease-out;
+  
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// 19. 加载骨架屏动画
+// ========================================
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: $radius-sm;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// 20. 性能优化
+// ========================================
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

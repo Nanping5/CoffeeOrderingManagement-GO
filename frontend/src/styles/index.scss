@@ -1,0 +1,628 @@
+// ========================================
+// 现代化咖啡点餐系统 - 主样式文件
+// ========================================
+
+// 导入核心样式
+@import './variables.scss';
+@import './mixins.scss';
+@import './animations.scss';
+
+// ========================================
+// CSS 变量 - 主题系统
+// ========================================
+:root {
+  // 浅色主题变量
+  --admin-bg: #f8fafc;
+  --admin-bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --admin-sidebar-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --admin-sidebar-border: #e2e8f0;
+  --admin-header-bg: rgba(255, 255, 255, 0.95);
+  --admin-card-bg: #ffffff;
+  --admin-card-border: #e2e8f0;
+  --admin-card-header-bg: #f8fafc;
+  --admin-text-primary: #1e293b;
+  --admin-text-secondary: #64748b;
+  --admin-text-muted: #94a3b8;
+  --admin-btn-bg: #f1f5f9;
+  --admin-btn-hover: #e2e8f0;
+  --admin-item-bg: #f8fafc;
+  --admin-scrollbar-track: rgba(0, 0, 0, 0.05);
+  --admin-scrollbar-thumb: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme='dark'],
+html.dark {
+  // 深色主题变量
+  --admin-bg: #0f172a;
+  --admin-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --admin-sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  --admin-sidebar-border: rgba(255, 255, 255, 0.05);
+  --admin-header-bg: rgba(30, 41, 59, 0.95);
+  --admin-card-bg: rgba(255, 255, 255, 0.05);
+  --admin-card-border: rgba(255, 255, 255, 0.05);
+  --admin-card-header-bg: rgba(255, 255, 255, 0.02);
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: rgba(255, 255, 255, 0.6);
+  --admin-text-muted: rgba(255, 255, 255, 0.4);
+  --admin-btn-bg: rgba(255, 255, 255, 0.05);
+  --admin-btn-hover: rgba(255, 255, 255, 0.1);
+  --admin-item-bg: rgba(255, 255, 255, 0.03);
+  --admin-scrollbar-track: rgba(255, 255, 255, 0.05);
+  --admin-scrollbar-thumb: rgba(255, 255, 255, 0.1);
+}
+
+// 重置样式
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  @include smooth-scroll;
+  
+  @include respond-to(md) {
+    font-size: 14px;
+  }
+}
+
+body {
+  min-height: 100vh;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  color: $text-primary;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+html[data-theme='dark'] body,
+html.dark body {
+  background: linear-gradient(135deg, $dark-bg 0%, $dark-bg-secondary 100%);
+  color: $dark-text;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+// 通用工具类
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.flex { display: flex; }
+.flex-center { @include flex-center; }
+.flex-between { @include flex-between; }
+.flex-column { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+
+.hidden { display: none; }
+.block { display: block; }
+.inline { display: inline; }
+.inline-block { display: inline-block; }
+
+// 间距工具类
+@each $size, $value in (xs: $spacing-xs, sm: $spacing-sm, md: $spacing-md, lg: $spacing-lg, xl: $spacing-xl) {
+  .p-#{$size} { padding: $value; }
+  .pt-#{$size} { padding-top: $value; }
+  .pr-#{$size} { padding-right: $value; }
+  .pb-#{$size} { padding-bottom: $value; }
+  .pl-#{$size} { padding-left: $value; }
+  .px-#{$size} { padding-left: $value; padding-right: $value; }
+  .py-#{$size} { padding-top: $value; padding-bottom: $value; }
+
+  .m-#{$size} { margin: $value; }
+  .mt-#{$size} { margin-top: $value; }
+  .mr-#{$size} { margin-right: $value; }
+  .mb-#{$size} { margin-bottom: $value; }
+  .ml-#{$size} { margin-left: $value; }
+  .mx-#{$size} { margin-left: $value; margin-right: $value; }
+  .my-#{$size} { margin-top: $value; margin-bottom: $value; }
+}
+
+// 圆角工具类
+.rounded-sm { border-radius: $radius-sm; }
+.rounded { border-radius: $radius-md; }
+.rounded-lg { border-radius: $radius-lg; }
+.rounded-full { border-radius: 50%; }
+
+// 阴影工具类
+.shadow-sm { box-shadow: $shadow-sm; }
+.shadow { box-shadow: $shadow-md; }
+.shadow-lg { box-shadow: $shadow-lg; }
+
+// 文本工具类
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-light { color: var(--text-light); }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-danger { color: var(--danger-color); }
+.text-info { color: var(--info-color); }
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-md { font-size: var(--font-size-md); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-xxl { font-size: var(--font-size-xxl); }
+
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+// 背景工具类
+.bg-white { background-color: var(--white); }
+.bg-primary { background-color: var(--primary-color); }
+.bg-secondary { background-color: var(--secondary-color); }
+.bg-accent { background-color: var(--accent-color); }
+.bg-success { background-color: var(--success-color); }
+.bg-warning { background-color: var(--warning-color); }
+.bg-danger { background-color: var(--danger-color); }
+.bg-info { background-color: var(--info-color); }
+
+// 边框工具类
+.border { border: 1px solid var(--border-color); }
+.border-t { border-top: 1px solid var(--border-color); }
+.border-b { border-bottom: 1px solid var(--border-color); }
+.border-l { border-left: 1px solid var(--border-color); }
+.border-r { border-right: 1px solid var(--border-color); }
+
+// 自定义组件样式
+.coffee-card {
+  box-shadow: $shadow-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.coffee-button {
+  background: $primary-gradient;
+  color: white;
+  border: none;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.coffee-input {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid var(--border-color);
+  border-radius: $radius-md;
+  font-size: var(--font-size-md);
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(111, 78, 55, 0.1);
+  }
+}
+
+// 加载动画
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid $primary-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 页面容器
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-lg;
+
+  @include respond-to(md) {
+    padding: $spacing-md;
+  }
+}
+
+.page-header {
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    font-size: var(--font-size-xxl);
+    color: var(--primary-color);
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+// 响应式图片
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: $radius-md;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+// 动画类
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-up-enter-from {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.slide-up-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+// 打印样式
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .page-container {
+    max-width: none;
+    padding: 0;
+  }
+}
+
+// ========================================
+// Element Plus 深色模式适配
+// ========================================
+
+// 深色模式下的 Element Plus 组件样式覆盖
+[data-theme='dark'],
+.dark-mode {
+  // 输入框
+  .el-input__wrapper {
+    background-color: rgba(#1A1A1A, 0.6);
+    box-shadow: 0 0 0 1px #404040 inset;
+  }
+  
+  .el-input__inner {
+    color: #E0E0E0;
+    
+    &::placeholder {
+      color: rgba(#E0E0E0, 0.5);
+    }
+  }
+  
+  // 选择器
+  .el-select {
+    .el-input__wrapper {
+      background-color: rgba(#1A1A1A, 0.6);
+      box-shadow: 0 0 0 1px #404040 inset;
+    }
+    
+    .el-input__inner {
+      color: #E0E0E0;
+    }
+  }
+  
+  // 下拉菜单
+  .el-select-dropdown {
+    background-color: #2D2D2D;
+    border-color: #404040;
+  }
+  
+  .el-select-dropdown__item {
+    color: #E0E0E0;
+    
+    &:hover {
+      background-color: rgba(#8B7355, 0.2);
+    }
+    
+    &.selected {
+      color: #8B7355;
+    }
+  }
+  
+  // 按钮
+  .el-button {
+    &.el-button--default {
+      background-color: rgba(#1A1A1A, 0.6);
+      border-color: #404040;
+      color: #E0E0E0;
+      
+      &:hover {
+        background-color: rgba(#1A1A1A, 0.8);
+        border-color: #8B7355;
+      }
+    }
+  }
+  
+  // 卡片
+  .el-card {
+    background-color: rgba(#2D2D2D, 0.95);
+    border-color: #404040;
+    
+    .el-card__header {
+      background-color: rgba(#1A1A1A, 0.5);
+      border-bottom-color: #404040;
+      color: #E0E0E0;
+    }
+    
+    .el-card__body {
+      color: #E0E0E0;
+    }
+  }
+  
+  // 对话框
+  .el-dialog {
+    background-color: #2D2D2D;
+    border: 1px solid #404040;
+    
+    .el-dialog__header {
+      border-bottom: 1px solid #404040;
+    }
+    
+    .el-dialog__title {
+      color: #E0E0E0;
+    }
+    
+    .el-dialog__body {
+      color: #E0E0E0;
+    }
+    
+    .el-dialog__footer {
+      border-top: 1px solid #404040;
+    }
+  }
+  
+  // 消息提示
+  .el-message {
+    background-color: #2D2D2D;
+    border-color: #404040;
+    
+    .el-message__content {
+      color: #E0E0E0;
+    }
+  }
+  
+  // 通知
+  .el-notification {
+    background-color: #2D2D2D;
+    border-color: #404040;
+    
+    .el-notification__title {
+      color: #E0E0E0;
+    }
+    
+    .el-notification__content {
+      color: rgba(#E0E0E0, 0.8);
+    }
+  }
+  
+  // 单选按钮组
+  .el-radio-button__inner {
+    background-color: rgba(#1A1A1A, 0.6);
+    border-color: #404040;
+    color: #E0E0E0;
+    
+    &:hover {
+      color: #8B7355;
+    }
+  }
+  
+  .el-radio-button__original-radio:checked + .el-radio-button__inner {
+    background-color: #8B7355;
+    border-color: #8B7355;
+    color: white;
+    box-shadow: -1px 0 0 0 #8B7355;
+  }
+  
+  // 标签
+  .el-tag {
+    &.el-tag--info {
+      background-color: rgba(#1A1A1A, 0.6);
+      border-color: #404040;
+      color: #E0E0E0;
+    }
+  }
+  
+  // 空状态
+  .el-empty {
+    .el-empty__description {
+      color: rgba(#E0E0E0, 0.7);
+    }
+    
+    .el-empty__image svg {
+      fill: rgba(#E0E0E0, 0.3);
+    }
+  }
+  
+  // 骨架屏
+  .el-skeleton {
+    .el-skeleton__item {
+      background: linear-gradient(
+        90deg,
+        rgba(#1A1A1A, 0.6) 25%,
+        rgba(#2D2D2D, 0.8) 37%,
+        rgba(#1A1A1A, 0.6) 63%
+      );
+    }
+  }
+  
+  // 表格
+  .el-table {
+    background-color: transparent;
+    color: #E0E0E0;
+    
+    th.el-table__cell {
+      background-color: rgba(#1A1A1A, 0.6);
+      color: #E0E0E0;
+      border-bottom-color: #404040;
+    }
+    
+    tr {
+      background-color: transparent;
+      
+      &:hover > td {
+        background-color: rgba(#8B7355, 0.1);
+      }
+    }
+    
+    td.el-table__cell {
+      border-bottom-color: #404040;
+    }
+  }
+  
+  // 分页
+  .el-pagination {
+    .el-pagination__total,
+    .el-pagination__jump {
+      color: #E0E0E0;
+    }
+    
+    .btn-prev,
+    .btn-next,
+    .el-pager li {
+      background-color: rgba(#1A1A1A, 0.6);
+      color: #E0E0E0;
+      
+      &:hover {
+        color: #8B7355;
+      }
+      
+      &.active {
+        background-color: #8B7355;
+        color: white;
+      }
+    }
+  }
+  
+  // 加载
+  .el-loading-mask {
+    background-color: rgba(#1A1A1A, 0.8);
+  }
+  
+  // 弹出框
+  .el-popper {
+    background-color: #2D2D2D;
+    border-color: #404040;
+    
+    .el-popper__arrow::before {
+      background-color: #2D2D2D;
+      border-color: #404040;
+    }
+  }
+  
+  // 工具提示
+  .el-tooltip__popper {
+    background-color: #2D2D2D;
+    color: #E0E0E0;
+    border: 1px solid #404040;
+    
+    .el-tooltip__arrow::before {
+      background-color: #2D2D2D;
+      border-color: #404040;
+    }
+  }
+  
+  // 滚动条深色模式
+  ::-webkit-scrollbar-track {
+    background: #1A1A1A;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(#8B7355, 0.5);
+    
+    &:hover {
+      background: #8B7355;
+    }
+  }
+}
+
+// 媒体查询深色模式
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme='light']) {
+    .el-input__wrapper {
+      background-color: rgba(#1A1A1A, 0.6);
+      box-shadow: 0 0 0 1px #404040 inset;
+    }
+    
+    .el-input__inner {
+      color: #E0E0E0;
+    }
+  }
+}
