@@ -760,6 +760,11 @@ watch(() => route.path, () => {
   right: 0;
   padding: $spacing-md;
   box-shadow: $shadow-lg;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 1000;
   
   .mobile-nav {
     display: flex;
@@ -848,5 +853,95 @@ watch(() => route.path, () => {
 .mobile-menu-slide-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+// 移动端深度优化
+@include respond-to(md) {
+  .header-container {
+    padding: $spacing-sm $spacing-sm;
+  }
+  
+  .header-brand {
+    gap: $spacing-sm;
+    
+    .logo-wrapper .logo-icon {
+      font-size: 24px !important;
+    }
+  }
+  
+  .cart-button-wrapper {
+    .cart-button {
+      width: 36px;
+      height: 36px;
+      
+      .cart-badge {
+        font-size: 10px;
+        padding: 1px 4px;
+        min-width: 14px;
+      }
+    }
+    
+    .cart-price-tip {
+      display: none;
+    }
+  }
+  
+  .user-button-wrapper {
+    .user-button {
+      width: 36px;
+      height: 36px;
+    }
+    
+    .login-btn {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-sm;
+    }
+  }
+  
+  .mobile-menu-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// 移动端菜单优化
+@include respond-to(sm) {
+  .mobile-menu {
+    .mobile-nav {
+      .mobile-nav-item {
+        padding: $spacing-md $spacing-sm;
+        font-size: $font-size-base;
+        
+        .el-icon {
+          font-size: 18px !important;
+        }
+      }
+    }
+  }
+}
+
+// 深色模式移动端适配 - 使用 CSS 选择器而非 mixin
+html[data-theme='dark'] {
+  .mobile-menu {
+    background: rgba(45, 45, 45, 0.95);
+    border-top: 1px solid #404040;
+    
+    .mobile-nav-item {
+      color: #E0E0E0;
+      
+      &:hover {
+        background: rgba(139, 115, 85, 0.2);
+      }
+      
+      &.is-active {
+        background: linear-gradient(135deg, #8B7355 0%, #C4A57B 100%);
+        color: white;
+      }
+      
+      &.logout {
+        border-top-color: #404040;
+      }
+    }
+  }
 }
 </style>

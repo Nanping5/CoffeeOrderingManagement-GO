@@ -492,43 +492,177 @@ onMounted(() => {
   }
 }
 
-// 响应式设计
+// 响应式设计 - 移动端适配
 @media (max-width: 768px) {
   .checkout-success-page {
-    padding: 20px 16px;
+    padding: 20px 12px;
+    align-items: flex-start;
+    padding-top: 30px;
+  }
+
+  .success-icon {
+    .el-icon {
+      font-size: 70px !important;
+    }
   }
 
   .success-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .success-subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
   }
 
   .pickup-code-section {
-    padding: 30px 20px;
+    padding: 24px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+
+    .pickup-code-label {
+      font-size: 1rem;
+    }
 
     .pickup-code {
-      font-size: 3rem;
+      font-size: 2.5rem;
       letter-spacing: 4px;
+    }
+
+    .pickup-code-tip {
+      font-size: 0.85rem;
+    }
+  }
+
+  .order-info-card {
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+    :deep(.el-card__header) {
+      padding: 12px 16px;
+    }
+
+    :deep(.el-card__body) {
+      padding: 16px;
+    }
+
+    .card-header h3 {
+      font-size: 1.1rem;
+    }
+
+    .order-details {
+      .detail-row {
+        padding: 10px 0;
+        font-size: 0.9rem;
+
+        &.total {
+          .value {
+            font-size: 1.3rem;
+          }
+        }
+      }
+    }
+
+    .order-items {
+      h4 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+
+      .order-item {
+        padding: 8px 0;
+
+        .item-info {
+          .item-name {
+            font-size: 0.9rem;
+          }
+
+          .item-quantity {
+            font-size: 0.8rem;
+          }
+        }
+
+        .item-price {
+          font-size: 0.9rem;
+        }
+      }
     }
   }
 
   .action-buttons {
     flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
 
     .continue-btn,
     .print-btn {
       width: 100%;
+      height: 46px;
+      font-size: 1rem;
+    }
+  }
+
+  .tips-alert {
+    border-radius: 10px;
+
+    :deep(.el-alert__content) {
+      p {
+        font-size: 0.85rem;
+        margin: 4px 0;
+      }
     }
   }
 }
 
 @media (max-width: 480px) {
+  .checkout-success-page {
+    padding: 16px 10px;
+    padding-top: 20px;
+  }
+
+  .success-icon .el-icon {
+    font-size: 60px !important;
+  }
+
   .success-title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+  }
+
+  .success-subtitle {
+    font-size: 0.9rem;
   }
 
   .pickup-code-section {
+    padding: 20px 12px;
+
     .pickup-code {
-      font-size: 2.5rem;
+      font-size: 2rem;
+      letter-spacing: 3px;
+    }
+  }
+
+  .order-info-card {
+    .order-details .detail-row {
+      flex-wrap: wrap;
+      
+      .label {
+        flex: 0 0 100%;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
+      }
+      
+      .value {
+        font-size: 0.9rem;
+      }
+      
+      &.total {
+        flex-wrap: nowrap;
+        
+        .label {
+          flex: 0 0 auto;
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }

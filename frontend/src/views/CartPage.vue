@@ -793,18 +793,178 @@ onMounted(async () => {
   transition: transform $transition-base $ease-out;
 }
 
-// 响应式
+// 响应式 - 移动端适配
+@include respond-to(lg) {
+  .cart-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkout-section {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    border-radius: $radius-lg $radius-lg 0 0;
+    padding: $spacing-md;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    background: white;
+    max-height: 40vh;
+    overflow-y: auto;
+    
+    h2 {
+      font-size: $font-size-lg;
+      margin-bottom: $spacing-sm;
+      display: none; // 移动端隐藏标题节省空间
+    }
+    
+    .total-info {
+      margin-bottom: $spacing-xs;
+      
+      .total-row {
+        font-size: $font-size-sm;
+        margin-bottom: $spacing-xs;
+        
+        &:not(.main-total) {
+          display: none; // 隐藏非主要信息
+        }
+        
+        &.main-total {
+          padding-top: 0;
+          border-top: none;
+          
+          .total-price .price-value {
+            font-size: $font-size-xl;
+          }
+        }
+      }
+    }
+    
+    .points-section {
+      padding: $spacing-xs $spacing-sm;
+      margin-bottom: $spacing-xs;
+      
+      .points-header {
+        flex-wrap: wrap;
+        gap: $spacing-xs;
+        font-size: $font-size-xs;
+      }
+      
+      .points-usage {
+        .el-slider {
+          margin: $spacing-xs 0;
+        }
+        
+        .points-info {
+          font-size: $font-size-xs;
+        }
+      }
+    }
+    
+    .login-tip {
+      padding: $spacing-xs $spacing-sm;
+      margin-bottom: $spacing-xs;
+      font-size: $font-size-xs;
+    }
+    
+    .checkout-btn {
+      padding: $spacing-sm;
+      font-size: $font-size-base;
+      margin-bottom: $spacing-xs;
+    }
+    
+    .pickup-info {
+      flex-direction: row;
+      justify-content: center;
+      gap: $spacing-md;
+      
+      .info-item {
+        font-size: $font-size-xs;
+      }
+    }
+  }
+  
+  .cart-items-section {
+    margin-bottom: 200px; // 为固定底部结算区留出空间
+  }
+}
+
+// 深色模式下的固定结算区
+html[data-theme='dark'] {
+  @media (max-width: 1024px) {
+    .checkout-section {
+      background: #2D2D2D;
+      border-top: 1px solid #404040;
+    }
+  }
+}
+
 @include respond-to(md) {
+  .cart-page-enhanced {
+    padding: $spacing-lg $spacing-sm;
+  }
+  
+  .page-header {
+    margin-bottom: $spacing-lg;
+    
+    .page-title {
+      font-size: $font-size-2xl;
+      gap: $spacing-sm;
+    }
+    
+    .page-subtitle {
+      font-size: $font-size-base;
+    }
+  }
+  
+  .cart-items-section {
+    padding: $spacing-md;
+    
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      
+      h2 {
+        font-size: $font-size-lg;
+      }
+      
+      .clear-btn {
+        width: 100%;
+      }
+    }
+  }
+  
   .cart-item {
     flex-wrap: wrap;
+    padding: $spacing-sm;
 
     .drag-handle {
       display: none;
     }
 
     .item-image {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
+    }
+    
+    .item-info {
+      flex: 1;
+      min-width: 0;
+      
+      .item-name {
+        font-size: $font-size-base;
+      }
+      
+      .item-description {
+        font-size: $font-size-xs;
+        -webkit-line-clamp: 1;
+      }
+      
+      .item-controls .quantity-input {
+        width: 100px;
+      }
     }
 
     .item-actions {
@@ -812,6 +972,70 @@ onMounted(async () => {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      margin-top: $spacing-sm;
+      padding-top: $spacing-sm;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      
+      .item-price {
+        text-align: left;
+        
+        .price {
+          font-size: $font-size-lg;
+        }
+        
+        .unit-price {
+          font-size: $font-size-xs;
+        }
+      }
+    }
+  }
+  
+  .empty-cart {
+    padding: $spacing-xl $spacing-md;
+    min-height: 50vh;
+    
+    .empty-icon {
+      font-size: 60px !important;
+    }
+    
+    .empty-text {
+      font-size: $font-size-lg;
+    }
+    
+    .browse-btn {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+}
+
+// 超小屏幕适配
+@media (max-width: 480px) {
+  .cart-page-enhanced {
+    padding: $spacing-md $spacing-xs;
+  }
+  
+  .cart-item {
+    .item-image {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .item-info {
+      .item-name {
+        font-size: $font-size-sm;
+      }
+      
+      .item-controls .quantity-input {
+        width: 90px;
+      }
+    }
+  }
+  
+  .checkout-section {
+    .pickup-info {
+      flex-direction: column;
+      gap: $spacing-xs;
     }
   }
 }

@@ -480,4 +480,94 @@ onMounted(async () => {
   h3 { margin: 0; color: $text-primary; }
   p { margin: 0; color: $text-secondary; }
 }
+
+// 移动端适配
+@include respond-to(md) {
+  .profile-page {
+    padding: $spacing-lg $spacing-sm;
+  }
+  
+  .page-header {
+    margin-bottom: $spacing-lg;
+    
+    .page-title {
+      font-size: $font-size-2xl;
+      gap: $spacing-sm;
+    }
+    
+    .page-subtitle {
+      font-size: $font-size-base;
+    }
+  }
+  
+  .profile-card {
+    padding: $spacing-md;
+    
+    .profile-header {
+      flex-direction: column;
+      text-align: center;
+      gap: $spacing-md;
+    }
+    
+    .avatar-section {
+      .el-avatar {
+        width: 80px !important;
+        height: 80px !important;
+      }
+    }
+    
+    .user-details {
+      h2 {
+        font-size: $font-size-xl;
+      }
+    }
+  }
+  
+  .info-card, .password-card {
+    :deep(.el-card__body) {
+      padding: $spacing-md;
+    }
+    
+    .el-form-item {
+      margin-bottom: $spacing-sm;
+    }
+    
+    .el-form-item__label {
+      font-size: $font-size-sm;
+    }
+  }
+  
+  .actions-card {
+    padding: $spacing-md;
+    
+    .action-btn {
+      height: 50px;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: $spacing-md $spacing-xs;
+  }
+  
+  .page-header .page-title {
+    font-size: $font-size-xl;
+  }
+  
+  .profile-card {
+    padding: $spacing-sm;
+    
+    .avatar-section .el-avatar {
+      width: 60px !important;
+      height: 60px !important;
+    }
+    
+    .user-details {
+      h2 { font-size: $font-size-lg; }
+      .email, .points { font-size: $font-size-xs; }
+    }
+  }
+}
 </style>

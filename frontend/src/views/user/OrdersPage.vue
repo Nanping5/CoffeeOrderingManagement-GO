@@ -360,4 +360,129 @@ onMounted(() => {
   @include flex-center;
   margin-top: $spacing-xl;
 }
+
+// 移动端适配
+@include respond-to(md) {
+  .orders-page {
+    padding: $spacing-lg $spacing-sm;
+  }
+  
+  .page-header {
+    margin-bottom: $spacing-lg;
+    
+    .page-title {
+      font-size: $font-size-2xl;
+      gap: $spacing-sm;
+    }
+    
+    .page-subtitle {
+      font-size: $font-size-base;
+    }
+  }
+  
+  .filter-bar {
+    padding: $spacing-sm;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    :deep(.el-radio-group) {
+      display: flex;
+      flex-wrap: nowrap;
+      
+      .el-radio-button {
+        flex-shrink: 0;
+        
+        .el-radio-button__inner {
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+  }
+  
+  .order-card {
+    :deep(.el-card__body) {
+      padding: $spacing-md;
+    }
+    
+    .order-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      
+      .order-info {
+        width: 100%;
+        
+        .order-number {
+          font-size: $font-size-sm;
+        }
+        
+        .order-time {
+          font-size: $font-size-xs;
+        }
+      }
+    }
+    
+    .pickup-code-display {
+      padding: $spacing-md;
+      
+      .code {
+        font-size: $font-size-xl;
+        letter-spacing: 2px;
+      }
+    }
+    
+    .order-items .order-item {
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      
+      .item-name {
+        flex: 1 1 100%;
+        font-size: $font-size-sm;
+      }
+      
+      .item-quantity, .item-price {
+        font-size: $font-size-sm;
+      }
+    }
+    
+    .order-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      
+      .order-summary {
+        flex-wrap: wrap;
+        font-size: $font-size-xs;
+      }
+      
+      .order-total {
+        width: 100%;
+        text-align: right;
+        font-size: $font-size-sm;
+        
+        .price {
+          font-size: $font-size-base;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-page {
+    padding: $spacing-md $spacing-xs;
+  }
+  
+  .page-header .page-title {
+    font-size: $font-size-xl;
+  }
+  
+  .filter-bar {
+    :deep(.el-radio-button .el-radio-button__inner) {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+  }
+}
 </style>

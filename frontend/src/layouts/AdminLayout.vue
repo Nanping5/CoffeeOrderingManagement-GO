@@ -96,14 +96,27 @@ const toggleSidebar = () => {
   transform: translateY(-20px);
 }
 
-// 响应式设计
+// 响应式设计 - 移动端适配
 @media (max-width: 768px) {
   .admin-layout {
-    flex-direction: column;
+    position: relative;
+  }
+
+  .admin-main {
+    width: 100%;
+    margin-left: 0 !important;
   }
 
   .admin-content {
-    padding: 16px;
+    padding: 12px;
+    padding-bottom: 80px; // 为底部导航留出空间
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 8px;
+    padding-bottom: 80px;
   }
 }
 </style>

@@ -280,4 +280,68 @@ const handleRegister = async () => {
     }
   }
 }
+
+// 移动端适配
+@include respond-to(md) {
+  .register-page {
+    padding: $spacing-md;
+    align-items: flex-start;
+    padding-top: $spacing-lg;
+  }
+  
+  .register-card {
+    padding: $spacing-lg;
+    max-width: 100%;
+    
+    :deep(.el-card__body) {
+      padding: 0;
+    }
+  }
+  
+  .register-header {
+    margin-bottom: $spacing-lg;
+    
+    h2 {
+      font-size: $font-size-xl;
+    }
+  }
+  
+  .register-form {
+    .el-form-item {
+      margin-bottom: $spacing-sm;
+    }
+    
+    // 姓名字段在移动端堆叠显示
+    .el-row {
+      .el-col {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .register-page {
+    padding: $spacing-sm;
+    padding-top: $spacing-md;
+  }
+  
+  .register-card {
+    padding: $spacing-md;
+  }
+  
+  .register-header {
+    margin-bottom: $spacing-md;
+    
+    h2 {
+      font-size: $font-size-lg;
+    }
+    
+    p {
+      font-size: $font-size-xs;
+    }
+  }
+}
 </style>

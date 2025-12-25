@@ -207,4 +207,123 @@ onMounted(() => fetchOrders())
   justify-content: flex-end;
 }
 .order-detail h4 { color: #2c3e50; }
+
+// 移动端适配
+@media (max-width: 768px) {
+  .order-manage-page {
+    padding: 12px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    
+    h2 { font-size: 18px; }
+    
+    .header-actions {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      .el-select {
+        flex: 1;
+        min-width: 100px;
+        margin-right: 0 !important;
+      }
+      
+      .el-button {
+        flex: 1;
+      }
+    }
+  }
+  
+  :deep(.el-card) {
+    border-radius: 8px;
+    
+    .el-card__body {
+      padding: 12px;
+    }
+  }
+  
+  :deep(.el-table) {
+    font-size: 12px;
+    
+    .el-table__header th {
+      padding: 8px 4px;
+      font-size: 11px;
+    }
+    
+    .el-table__body td {
+      padding: 8px 4px;
+    }
+    
+    // 隐藏部分列
+    .el-table__body-wrapper {
+      overflow-x: auto;
+    }
+  }
+  
+  .pagination-wrapper {
+    justify-content: center;
+    
+    :deep(.el-pagination) {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      
+      .el-pagination__sizes {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .order-manage-page {
+    padding: 8px;
+  }
+  
+  .page-header {
+    padding: 12px;
+    
+    h2 { font-size: 16px; }
+    
+    .header-actions {
+      flex-direction: column;
+      
+      .el-select, .el-button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// 订单详情对话框移动端适配
+@media (max-width: 768px) {
+  :deep(.el-dialog) {
+    width: 95% !important;
+    margin: 10px auto;
+    
+    .el-dialog__body {
+      padding: 12px;
+    }
+  }
+  
+  .order-detail {
+    :deep(.el-descriptions) {
+      .el-descriptions__label,
+      .el-descriptions__content {
+        padding: 8px;
+        font-size: 12px;
+      }
+    }
+    
+    :deep(.el-table) {
+      font-size: 12px;
+    }
+  }
+}
 </style>

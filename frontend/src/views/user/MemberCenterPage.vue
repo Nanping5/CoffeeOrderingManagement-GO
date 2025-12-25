@@ -454,4 +454,131 @@ onMounted(async () => {
     }
   }
 }
+
+// 移动端适配
+@include respond-to(md) {
+  .member-center-page {
+    padding: $spacing-lg $spacing-sm;
+  }
+  
+  .page-header {
+    margin-bottom: $spacing-lg;
+    
+    .page-title {
+      font-size: $font-size-2xl;
+      gap: $spacing-sm;
+    }
+    
+    .page-subtitle {
+      font-size: $font-size-base;
+    }
+  }
+  
+  .member-level-card {
+    padding: $spacing-md;
+    
+    .level-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .level-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+      width: 100%;
+    }
+    
+    .level-progress {
+      width: 100%;
+      max-width: none;
+      margin-top: $spacing-md;
+    }
+  }
+  
+  .points-card {
+    padding: $spacing-md;
+    
+    .points-icon {
+      font-size: 32px;
+    }
+    
+    .points-value {
+      font-size: $font-size-2xl;
+    }
+  }
+  
+  .quick-actions {
+    padding: $spacing-md;
+    
+    h3 {
+      font-size: $font-size-lg;
+      margin-bottom: $spacing-md;
+    }
+    
+    .action-btn {
+      height: 50px;
+      font-size: $font-size-sm;
+    }
+  }
+  
+  .points-history {
+    padding: $spacing-md;
+    
+    .points-table {
+      font-size: $font-size-sm;
+      
+      :deep(.el-table__header th) {
+        font-size: $font-size-xs;
+        padding: $spacing-xs;
+      }
+      
+      :deep(.el-table__body td) {
+        padding: $spacing-xs;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .member-center-page {
+    padding: $spacing-md $spacing-xs;
+  }
+  
+  .page-header .page-title {
+    font-size: $font-size-xl;
+  }
+  
+  .member-level-card {
+    .level-badge {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-sm;
+    }
+    
+    .user-info {
+      h3 { font-size: $font-size-lg; }
+      p { font-size: $font-size-xs; }
+    }
+  }
+  
+  .points-card {
+    .points-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .points-value {
+      font-size: $font-size-xl;
+    }
+  }
+  
+  // 积分历史表格在小屏幕上横向滚动
+  .points-history {
+    .points-table {
+      :deep(.el-table__body-wrapper) {
+        overflow-x: auto;
+      }
+    }
+  }
+}
 </style>

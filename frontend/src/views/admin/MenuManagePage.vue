@@ -560,4 +560,130 @@ onMounted(() => {
 :deep(.el-dialog__body) {
   padding: 20px;
 }
+
+// 移动端适配
+@media (max-width: 768px) {
+  .menu-manage-page {
+    padding: 12px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    
+    h2 { font-size: 18px; }
+    
+    .el-button {
+      width: 100%;
+    }
+  }
+  
+  .search-bar {
+    padding: 12px;
+    
+    :deep(.el-row) {
+      .el-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        margin-bottom: 10px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .el-button {
+      width: 100%;
+    }
+  }
+  
+  :deep(.el-table) {
+    font-size: 12px;
+    
+    .el-table__header th {
+      padding: 8px 4px;
+      font-size: 11px;
+    }
+    
+    .el-table__body td {
+      padding: 8px 4px;
+    }
+    
+    .el-table__body-wrapper {
+      overflow-x: auto;
+    }
+  }
+  
+  .admin-image-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .pagination {
+    padding: 12px;
+    
+    :deep(.el-pagination) {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      
+      .el-pagination__sizes,
+      .el-pagination__jump {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-manage-page {
+    padding: 8px;
+  }
+  
+  .page-header {
+    padding: 12px;
+    
+    h2 { font-size: 16px; }
+  }
+  
+  .search-bar {
+    padding: 10px;
+  }
+}
+
+// 添加/编辑对话框移动端适配
+@media (max-width: 768px) {
+  :deep(.el-dialog) {
+    width: 95% !important;
+    margin: 10px auto;
+    
+    .el-dialog__header {
+      padding: 12px 16px;
+    }
+    
+    .el-dialog__body {
+      padding: 12px 16px;
+    }
+    
+    .el-dialog__footer {
+      padding: 12px 16px;
+    }
+  }
+  
+  :deep(.el-form) {
+    .el-form-item {
+      margin-bottom: 14px;
+    }
+    
+    .el-form-item__label {
+      font-size: 13px;
+      padding-bottom: 4px;
+    }
+  }
+}
 </style>

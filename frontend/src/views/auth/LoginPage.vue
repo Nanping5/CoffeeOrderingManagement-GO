@@ -216,4 +216,46 @@ const continueAsGuest = () => {
     font-size: $font-size-sm;
   }
 }
+
+// 移动端适配
+@include respond-to(md) {
+  .login-page {
+    padding: $spacing-md;
+    align-items: flex-start;
+    padding-top: $spacing-2xl;
+  }
+  
+  .login-card {
+    padding: $spacing-lg;
+    
+    :deep(.el-card__body) {
+      padding: 0;
+    }
+  }
+  
+  .login-header {
+    margin-bottom: $spacing-lg;
+    
+    h2 {
+      font-size: $font-size-xl;
+    }
+  }
+  
+  .login-form {
+    .el-form-item {
+      margin-bottom: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: $spacing-sm;
+    padding-top: $spacing-xl;
+  }
+  
+  .login-card {
+    padding: $spacing-md;
+  }
+}
 </style>

@@ -703,42 +703,153 @@ onMounted(async () => {
   }
 }
 
-// 响应式设计
+// 响应式设计 - 移动端适配
 @media (max-width: 768px) {
   .menu-page {
-    padding: 15px;
+    padding: 15px 10px;
   }
 
-  .page-title {
-    font-size: 2rem !important;
-
-    .title-icon {
+  .page-header {
+    margin-bottom: 20px;
+    
+    .page-title {
       font-size: 1.8rem !important;
+      gap: 10px;
+
+      .title-icon {
+        font-size: 1.5rem !important;
+      }
+    }
+    
+    .page-subtitle {
+      font-size: 0.9rem;
     }
   }
 
-  .filter-content {
-    flex-direction: column;
-    align-items: stretch;
-
-    .search-box,
-    .category-filter,
-    .sort-options {
+  .filter-section {
+    margin-bottom: 20px;
+    
+    .filter-wrapper {
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .category-tabs {
       width: 100%;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .category-tab {
+        flex-shrink: 0;
+        padding: 10px 16px;
+        font-size: 13px;
+        
+        .tab-icon {
+          font-size: 16px;
+        }
+      }
+    }
+    
+    .sort-dropdown {
+      width: 100%;
+      
+      .sort-btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   }
 
   .menu-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-
-  .item-detail {
-    flex-direction: column;
-
-    .detail-image {
+  
+  .load-more {
+    margin-top: 24px;
+    
+    .load-more-btn {
       width: 100%;
-      height: 250px;
+      padding: 12px 20px;
+    }
+  }
+}
+
+// 超小屏幕适配 (< 480px)
+@media (max-width: 480px) {
+  .menu-page {
+    padding: 10px 8px;
+  }
+  
+  .page-header {
+    .page-title {
+      font-size: 1.5rem !important;
+    }
+    
+    .page-subtitle {
+      font-size: 0.85rem;
+    }
+  }
+  
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .filter-section .category-tabs .category-tab {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+// 商品详情弹窗移动端适配
+@media (max-width: 768px) {
+  .detail-dialog {
+    :deep(.el-dialog) {
+      width: 95% !important;
+      margin: 10px auto;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .item-detail {
+      flex-direction: column;
+      gap: 16px;
+
+      .detail-image {
+        width: 100%;
+        height: 200px;
+      }
+      
+      .detail-info {
+        h3 {
+          font-size: 1.3rem;
+        }
+        
+        .description {
+          font-size: 0.9rem;
+        }
+        
+        .price-info .price {
+          font-size: 1.5rem;
+        }
+      }
+    }
+    
+    .dialog-footer {
+      display: flex;
+      gap: 10px;
+      
+      .el-button {
+        flex: 1;
+      }
     }
   }
 }

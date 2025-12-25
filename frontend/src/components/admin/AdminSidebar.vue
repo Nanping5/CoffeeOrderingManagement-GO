@@ -315,15 +315,98 @@ const toggleGroup = (path) => {
   max-height: 200px;
 }
 
-// 响应式
+// 响应式 - 移动端适配
 @media (max-width: 768px) {
   .admin-sidebar {
-    width: 80px;
-
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100% !important;
+    height: auto;
+    flex-direction: row;
+    border-right: none;
+    border-top: 1px solid var(--admin-sidebar-border);
+    z-index: 1000;
+    background: var(--admin-sidebar-bg);
+    
     &.collapsed {
-      width: 0;
-      padding: 0;
-      border: none;
+      width: 100% !important;
+    }
+  }
+  
+  .sidebar-logo {
+    display: none;
+  }
+  
+  .sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 4px;
+    overflow: visible;
+  }
+  
+  .nav-item {
+    margin-bottom: 0;
+    flex: 1;
+    
+    &.has-children {
+      display: none; // 移动端隐藏有子菜单的项
+    }
+  }
+  
+  .nav-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 4px;
+    border-radius: 8px;
+    justify-content: center;
+    
+    .nav-icon {
+      font-size: 22px;
+    }
+    
+    .nav-label {
+      font-size: 10px;
+      display: block !important;
+      opacity: 1 !important;
+    }
+    
+    &.router-link-exact-active,
+    &.active {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+  }
+  
+  .nav-children,
+  .group-header .arrow {
+    display: none;
+  }
+  
+  .sidebar-footer {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-nav {
+    padding: 6px 2px;
+  }
+  
+  .nav-link {
+    padding: 6px 2px;
+    
+    .nav-icon {
+      font-size: 20px;
+    }
+    
+    .nav-label {
+      font-size: 9px;
     }
   }
 }

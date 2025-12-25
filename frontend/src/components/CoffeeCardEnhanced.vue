@@ -720,22 +720,174 @@ const getCategoryType = (category) => {
   transform: translateY(10px);
 }
 
-// 响应式
+// 响应式 - 移动端适配
 @include respond-to(md) {
   .card-image-wrapper {
-    height: 180px;
+    height: 160px;
   }
   
   .card-content {
-    padding: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    gap: $spacing-sm;
   }
   
-  .item-name {
-    font-size: $font-size-lg !important;
+  .item-header {
+    .item-name {
+      font-size: $font-size-base !important;
+      -webkit-line-clamp: 1;
+    }
+    
+    .category-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+    }
   }
   
-  .current-price .price-value {
-    font-size: $font-size-2xl !important;
+  .item-description {
+    font-size: $font-size-xs;
+    -webkit-line-clamp: 1;
+  }
+  
+  .price-section {
+    .price-wrapper {
+      .current-price {
+        .currency {
+          font-size: $font-size-base;
+        }
+        
+        .price-value {
+          font-size: $font-size-xl !important;
+        }
+      }
+      
+      .original-price {
+        font-size: $font-size-xs;
+      }
+    }
+    
+    .sales-info {
+      display: none;
+    }
+  }
+  
+  .tags-section {
+    display: none;
+  }
+  
+  .action-section {
+    .quantity-selector {
+      display: none;
+    }
+    
+    .action-buttons {
+      .add-cart-btn,
+      .notify-btn {
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-xs;
+        
+        .button-text {
+          display: none;
+        }
+        
+        .el-icon {
+          margin: 0;
+        }
+      }
+    }
+  }
+  
+  .quick-view-btn {
+    display: none;
+  }
+  
+  .discount-badge,
+  .popular-badge {
+    padding: 2px 6px;
+    font-size: 10px;
+    
+    .badge-icon {
+      font-size: 10px;
+    }
+  }
+}
+
+// 超小屏幕 - 单列布局时的优化
+@media (max-width: 480px) {
+  .card-glass-container {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+  }
+  
+  .card-image-wrapper {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    border-radius: $radius-lg 0 0 $radius-lg;
+    
+    .image-container {
+      border-radius: $radius-lg 0 0 $radius-lg;
+    }
+  }
+  
+  .card-content {
+    flex: 1;
+    padding: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-xs;
+    
+    .item-name {
+      font-size: $font-size-base !important;
+    }
+  }
+  
+  .item-description {
+    display: none;
+  }
+  
+  .price-section {
+    .price-wrapper {
+      .current-price .price-value {
+        font-size: $font-size-lg !important;
+      }
+    }
+  }
+  
+  .action-section {
+    margin-top: auto;
+    
+    .action-buttons {
+      .add-cart-btn,
+      .notify-btn {
+        width: 100%;
+        justify-content: center;
+        
+        .button-text {
+          display: inline;
+          font-size: $font-size-xs;
+        }
+      }
+    }
+  }
+  
+  .discount-badge {
+    top: $spacing-xs;
+    left: $spacing-xs;
+  }
+  
+  .popular-badge {
+    top: $spacing-xs;
+    right: auto;
+    left: $spacing-xs;
+    top: auto;
+    bottom: $spacing-xs;
   }
 }
 </style>

@@ -293,4 +293,162 @@ onMounted(() => { fetchMenuStats(); fetchOrderStats() })
     &:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
   }
 }
+
+// 移动端适配
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding-bottom: 20px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    
+    .header-info {
+      h1 { font-size: 22px; }
+      p { font-size: 13px; }
+    }
+    
+    .refresh-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+    border-radius: 12px;
+    
+    .stat-content { margin-bottom: 10px; }
+    .stat-info {
+      .stat-label { font-size: 12px; margin-bottom: 4px; }
+      .stat-value { font-size: 20px; }
+    }
+    .stat-icon { width: 36px; height: 36px; font-size: 18px; border-radius: 8px; }
+    .stat-footer {
+      .trend { font-size: 11px; }
+      .trend-label { font-size: 10px; }
+    }
+  }
+  
+  .main-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .card {
+    border-radius: 12px;
+    
+    .card-header {
+      padding: 14px 16px;
+      h3 { font-size: 14px; }
+    }
+    .card-body { padding: 16px; }
+  }
+  
+  .status-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    
+    .status-item {
+      padding: 12px 8px;
+      border-radius: 8px;
+      
+      .status-count { font-size: 20px; }
+      .status-label { font-size: 10px; }
+    }
+  }
+  
+  .product-list .product-item {
+    padding: 12px 0;
+    gap: 10px;
+    
+    .product-rank { width: 26px; height: 26px; font-size: 12px; }
+    .product-info {
+      .product-name { font-size: 13px; }
+      .product-sales { font-size: 11px; }
+    }
+    .product-revenue { font-size: 14px; }
+  }
+  
+  .member-total {
+    padding: 16px;
+    margin-bottom: 14px;
+    
+    .total-value { font-size: 28px; }
+    .total-label { font-size: 12px; }
+  }
+  
+  .member-levels {
+    gap: 8px;
+    
+    .level-item {
+      .level-badge { width: 32px; height: 32px; font-size: 10px; }
+      .level-count { font-size: 14px; }
+    }
+  }
+  
+  .menu-stats {
+    gap: 8px;
+    
+    .menu-stat-item {
+      padding: 12px 8px;
+      
+      .stat-num { font-size: 20px; }
+      .stat-text { font-size: 10px; }
+    }
+  }
+  
+  .action-buttons {
+    gap: 8px;
+    
+    .action-btn {
+      padding: 12px;
+      font-size: 12px;
+      gap: 6px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .stat-card {
+    padding: 12px;
+    
+    .stat-info .stat-value { font-size: 18px; }
+    .stat-icon { width: 32px; height: 32px; font-size: 16px; }
+  }
+  
+  .status-grid {
+    grid-template-columns: repeat(3, 1fr);
+    
+    .status-item {
+      padding: 10px 4px;
+      
+      .status-count { font-size: 16px; }
+      .status-label { font-size: 9px; }
+    }
+  }
+  
+  .member-levels {
+    grid-template-columns: repeat(4, 1fr);
+    
+    .level-item {
+      .level-badge { width: 28px; height: 28px; font-size: 9px; }
+      .level-count { font-size: 12px; }
+    }
+  }
+}
 </style>
