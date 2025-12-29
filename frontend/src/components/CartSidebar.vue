@@ -24,10 +24,9 @@
     <!-- 侧边栏 -->
     <transition name="slide-fade">
       <div v-if="isOpen" class="cart-sidebar-overlay" @click="closeSidebar">
-        <div 
+        <div
           class="cart-sidebar glass-panel"
           @click.stop
-          v-touch:swipe.right="closeSidebar"
         >
           <!-- 头部 -->
           <div class="sidebar-header">
@@ -52,7 +51,6 @@
                 v-for="item in cartStore.items"
                 :key="item.id"
                 class="cart-item"
-                v-touch:swipe.left="() => handleSwipeDelete(item)"
               >
                 <!-- 商品图片 -->
                 <div class="item-image">

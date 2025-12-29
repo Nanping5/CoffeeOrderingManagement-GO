@@ -24,8 +24,8 @@
             <el-tag type="success" size="large" effect="dark">{{ row.pickup_code }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="total_price" label="金额" width="100">
-          <template #default="{ row }">¥{{ (row.total_price || 0).toFixed(2) }}</template>
+        <el-table-column prop="final_payment_amount" label="金额" width="100">
+          <template #default="{ row }">¥{{ (row.final_payment_amount || row.total_price || 0).toFixed(2) }}</template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
@@ -76,7 +76,9 @@
           <el-descriptions-item label="取餐码">
             <el-tag type="success" size="large" effect="dark">{{ currentOrder.pickup_code }}</el-tag>
           </el-descriptions-item>
-          <el-descriptions-item label="订单金额">¥{{ (currentOrder.total_price || 0).toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="原始金额">¥{{ (currentOrder.original_total_price || 0).toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="积分抵扣">-¥{{ (currentOrder.points_deduction_amount || 0).toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="实付金额">¥{{ (currentOrder.final_payment_amount || currentOrder.total_price || 0).toFixed(2) }}</el-descriptions-item>
           <el-descriptions-item label="订单状态">
             <el-tag :type="getStatusType(currentOrder.status)">{{ getStatusText(currentOrder.status) }}</el-tag>
           </el-descriptions-item>
@@ -91,7 +93,7 @@
             <template #default="{ row }">¥{{ (row.unit_price || 0).toFixed(2) }}</template>
           </el-table-column>
           <el-table-column prop="subtotal" label="小计" width="100">
-            <template #default="{ row }">¥{{ (row.subtotal || 0).toFixed(2) }}</template>
+            <template #default="{ row }">¥{{ (row.subtotal || (row.quantity * row.unit_price) || 0).toFixed(2) }}</template>
           </el-table-column>
         </el-table>
       </div>

@@ -53,20 +53,33 @@ func GetAllOrders(c *gin.Context) {
 	// 格式化订单数据
 	orderList := make([]gin.H, 0)
 	for _, order := range orders {
-		// 获取订单项数量
+		// 获取订单项数量和计算总价
 		var itemCount int64
-		db.Model(&models.OrderItem{}).Where("order_id = ?", order.ID).Count(&itemCount)
+		var orderItems []models.OrderItem
+		db.Model(&models.OrderItem{}).Where("order_id = ?", order.ID).Find(&orderItems)
+		itemCount = int64(len(orderItems))
+
+		// 计算订单总价
+		totalPrice := 0.0
+		for _, item := range orderItems {
+			totalPrice += item.GetSubtotal()
+		}
+
+		// 计算最终支付金额
+		finalPrice := totalPrice - order.PointsDeductionAmount
 
 		orderList = append(orderList, gin.H{
-			"id":           order.ID,
-			"order_number": order.OrderNumber,
-			"pickup_code":  order.PickupCode,
-			"total_price":  order.TotalPrice,
-			"status":       order.Status,
-			"notes":        order.Notes,
-			"item_count":   itemCount,
-			"created_at":   order.CreatedAt,
-			"updated_at":   order.UpdatedAt,
+			"id":                      order.ID,
+			"order_number":            order.OrderNumber,
+			"pickup_code":             order.PickupCode,
+			"original_total_price":    totalPrice,
+			"points_deduction_amount": order.PointsDeductionAmount,
+			"final_payment_amount":    finalPrice,
+			"status":                  order.Status,
+			"notes":                   order.Notes,
+			"item_count":              itemCount,
+			"created_at":              order.CreatedAt,
+			"updated_at":              order.UpdatedAt,
 		})
 	}
 
@@ -238,9 +251,9 @@ func GetOrderStatistics(c *gin.Context) {
 	}
 	var topProducts []TopProduct
 	db.Table("order_items").
-		Select("order_items.menu_id, menu_items.name as menu_name, SUM(order_items.quantity) as quantity, SUM(order_items.subtotal) as revenue").
-		Joins("LEFT JOIN menu_items ON order_items.menu_id = menu_items.id").
-		Group("order_items.menu_id, menu_items.name").
+		Select("order_items.menu_item_id, menu_items.name as menu_name, SUM(order_items.quantity) as quantity, SUM(order_items.subtotal) as revenue").
+		Joins("LEFT JOIN menu_items ON order_items.menu_item_id = menu_items.id").
+		Group("order_items.menu_item_id, menu_items.name").
 		Order("quantity DESC").
 		Limit(5).
 		Scan(&topProducts)

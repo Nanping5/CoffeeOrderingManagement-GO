@@ -23,18 +23,17 @@ type Order struct {
 	UserID                *uint        `gorm:"index" json:"user_id"` // 用户ID，可为空（游客订单）
 	OrderNumber           string       `gorm:"size:50;uniqueIndex;not null" json:"order_number"`
 	PickupCode            string       `gorm:"size:10;index;not null" json:"pickup_code"`
-	TotalPrice            float64      `gorm:"type:decimal(10,2);not null" json:"total_price"`
 	Status                OrderStatus  `gorm:"type:enum('pending','preparing','ready','completed','cancelled');default:'pending';index" json:"status"`
+	CustomerName          string       `gorm:"size:100" json:"customer_name"`
+	CustomerPhone         string       `gorm:"size:20" json:"customer_phone"`
 	Notes                 string       `gorm:"type:text" json:"notes"`
-	
+
 	// 积分相关字段
-	CustomerPointsUsed    int          `gorm:"default:0;index" json:"customer_points_used"`           // 使用的积分数量
-	PointsDeductionAmount float64      `gorm:"type:decimal(10,2);default:0.00" json:"points_deduction_amount"` // 积分抵扣金额
-	PointsEarned          int          `gorm:"default:0;index" json:"points_earned"`                  // 获得的积分数量
-	OriginalTotalPrice    float64      `gorm:"type:decimal(10,2)" json:"original_total_price"`        // 原始总价（积分抵扣前）
-	FinalPaymentAmount    float64      `gorm:"type:decimal(10,2)" json:"final_payment_amount"`        // 实际支付金额
+	CustomerPointsUsed    int          `gorm:"default:0;index" json:"customer_points_used"`                      // 使用的积分数量
+	PointsDeductionAmount float64      `gorm:"type:decimal(10,2);default:0.00" json:"points_deduction_amount"`   // 积分抵扣金额
+	PointsEarned          int          `gorm:"default:0;index" json:"points_earned"`                             // 获得的积分数量
 	MemberLevelAtTime     *MemberLevel `gorm:"type:enum('bronze','silver','gold','platinum')" json:"member_level_at_time"` // 下单时会员等级
-	
+
 	CreatedAt             time.Time    `gorm:"index" json:"created_at"`
 	UpdatedAt             time.Time    `json:"updated_at"`
 

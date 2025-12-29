@@ -14,8 +14,8 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "咖啡自助点餐系统API",
-			"version": "3.0.0-go",
-			"mode":    "自助点餐机模式",
+			"version": "1.0.0-go",
+			"mode":    "自助点餐模式",
 			"endpoints": gin.H{
 				"menu":   "/api/menu",
 				"orders": "/api/orders",

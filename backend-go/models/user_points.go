@@ -18,10 +18,8 @@ const (
 type UserPoints struct {
 	ID               uint        `gorm:"primaryKey" json:"id"`
 	UserID           uint        `gorm:"uniqueIndex;not null" json:"user_id"`
-	TotalPoints      int         `gorm:"default:0" json:"total_points"`           // 当前积分余额
-	AvailablePoints  int         `gorm:"default:0" json:"available_points"`       // 可用积分
-	FrozenPoints     int         `gorm:"default:0" json:"frozen_points"`          // 冻结积分
-	LifetimePoints   int         `gorm:"default:0" json:"lifetime_points"`        // 历史累计积分
+	TotalPoints      int         `gorm:"default:0" json:"total_points"`      // 当前可用积分
+	LifetimePoints   int         `gorm:"default:0" json:"lifetime_points"`   // 历史累计积分（用于等级升级）
 	MemberLevel      MemberLevel `gorm:"type:enum('bronze','silver','gold','platinum');default:'bronze'" json:"member_level"`
 	LevelUpgradeDate *time.Time  `json:"level_upgrade_date"`
 	CreatedAt        time.Time   `json:"created_at"`
@@ -39,8 +37,6 @@ func (UserPoints) TableName() string {
 // UserPointsResponse 积分信息响应
 type UserPointsResponse struct {
 	TotalPoints      int                    `json:"total_points"`
-	AvailablePoints  int                    `json:"available_points"`
-	FrozenPoints     int                    `json:"frozen_points"`
 	LifetimePoints   int                    `json:"lifetime_points"`
 	MemberLevel      string                 `json:"member_level"`
 	NextLevel        *NextLevelInfo         `json:"next_level,omitempty"`

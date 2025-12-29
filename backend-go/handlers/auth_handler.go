@@ -5,7 +5,6 @@ import (
 	"coffee-ordering-backend/models"
 	"coffee-ordering-backend/utils"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -86,47 +85,47 @@ func Register(c *gin.Context) {
 	// 检查积分账户是否已存在（触发器可能已创建）
 	var userPoints models.UserPoints
 	if err := tx.Where("user_id = ?", user.ID).First(&userPoints).Error; err != nil {
-		// 不存在则创建
+		// 不存在则创建（触发器应该已经创建，但以防触发器失败）
 		userPoints = models.UserPoints{
-			UserID:          user.ID,
-			TotalPoints:     50, // 注册奖励50积分
-			AvailablePoints: 50,
-			LifetimePoints:  50,
-			MemberLevel:     models.MemberLevelBronze,
+			UserID:         user.ID,
+			TotalPoints:    50, // 注册奖励50积分
+			LifetimePoints: 50,
+			MemberLevel:    models.MemberLevelBronze,
 		}
 		if err := tx.Create(&userPoints).Error; err != nil {
-			tx.Rollback()
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"success": false,
-				"message": "积分账户创建失败",
-			})
-			return
-		}
-	} else {
-		// 已存在则更新积分
-		userPoints.TotalPoints = 50
-		userPoints.AvailablePoints = 50
-		userPoints.LifetimePoints = 50
-		if err := tx.Save(&userPoints).Error; err != nil {
-			tx.Rollback()
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"success": false,
-				"message": "积分账户更新失败",
-			})
-			return
+			// 如果创建失败，检查是否是触发器已经创建
+			if err := tx.Where("user_id = ?", user.ID).First(&userPoints).Error; err == nil {
+				// 触发器已创建，继续使用
+			} else {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"success": false,
+					"message": "积分账户创建失败",
+				})
+				return
+			}
 		}
 	}
 
+	// 更新积分账户（无论是否是新创建的，都设置为初始积分）
+	userPoints.TotalPoints = 50
+	userPoints.LifetimePoints = 50
+	if err := tx.Save(&userPoints).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "积分账户更新失败",
+		})
+		return
+	}
+
 	// 记录注册奖励积分
-	expiresAt := time.Now().AddDate(1, 0, 0) // 1年后过期
 	pointTransaction := models.PointTransaction{
 		UserID:          user.ID,
 		TransactionType: models.TransactionTypeSignupBonus,
 		PointsChange:    50,
 		PointsBalance:   50,
 		Description:     "注册奖励",
-		ExpiresAt:       &expiresAt,
-		IsActive:        true,
 	}
 
 	if err := tx.Create(&pointTransaction).Error; err != nil {
@@ -211,11 +210,6 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-
-	// 更新最后登录时间
-	now := time.Now()
-	user.LastLoginAt = &now
-	db.Save(&user)
 
 	// 生成JWT令牌
 	token, err := utils.GenerateToken(user.ID, user.Username, user.Email, user.Role)
@@ -337,11 +331,6 @@ func AdminLogin(c *gin.Context) {
 		})
 		return
 	}
-
-	// 更新最后登录时间
-	now := time.Now()
-	user.LastLoginAt = &now
-	db.Save(&user)
 
 	// 生成JWT令牌
 	token, err := utils.GenerateToken(user.ID, user.Username, user.Email, user.Role)

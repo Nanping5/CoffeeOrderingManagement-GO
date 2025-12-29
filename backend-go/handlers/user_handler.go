@@ -5,6 +5,7 @@ import (
 	"coffee-ordering-backend/middleware"
 	"coffee-ordering-backend/models"
 	"coffee-ordering-backend/utils"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -52,9 +53,11 @@ func UpdateUserProfile(c *gin.Context) {
 
 	var req models.UpdateProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		log.Printf("用户资料更新参数错误: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"message": "请求参数错误",
+			"error":   err.Error(),
 		})
 		return
 	}
@@ -228,34 +231,41 @@ func GetUserOrders(c *gin.Context) {
 	orderList := make([]gin.H, 0)
 	for _, order := range orders {
 		items := make([]gin.H, 0)
+		totalPrice := 0.0
 		for _, item := range order.OrderItems {
 			menuName := ""
 			if item.MenuItem.ID > 0 {
 				menuName = item.MenuItem.Name
 			}
+			subtotal := item.GetSubtotal()
+			totalPrice += subtotal
 			items = append(items, gin.H{
 				"id":         item.ID,
 				"menu_id":    item.MenuID,
 				"menu_name":  menuName,
 				"quantity":   item.Quantity,
 				"unit_price": item.UnitPrice,
-				"subtotal":   item.Subtotal,
+				"subtotal":   subtotal,
 			})
 		}
 
+		// 计算最终支付金额
+		finalPrice := totalPrice - order.PointsDeductionAmount
+
 		orderList = append(orderList, gin.H{
-			"id":                   order.ID,
-			"order_number":         order.OrderNumber,
-			"pickup_code":          order.PickupCode,
-			"total_price":          order.TotalPrice,
-			"original_total_price": order.OriginalTotalPrice,
-			"points_used":          order.CustomerPointsUsed,
-			"points_earned":        order.PointsEarned,
-			"status":               order.Status,
-			"notes":                order.Notes,
-			"items":                items,
-			"item_count":           len(items),
-			"created_at":           order.CreatedAt,
+			"id":                      order.ID,
+			"order_number":            order.OrderNumber,
+			"pickup_code":             order.PickupCode,
+			"original_total_price":    totalPrice,
+			"points_deduction_amount": order.PointsDeductionAmount,
+			"final_payment_amount":    finalPrice,
+			"points_used":             order.CustomerPointsUsed,
+			"points_earned":           order.PointsEarned,
+			"status":                  order.Status,
+			"notes":                   order.Notes,
+			"items":                   items,
+			"item_count":              len(items),
+			"created_at":              order.CreatedAt,
 		})
 	}
 

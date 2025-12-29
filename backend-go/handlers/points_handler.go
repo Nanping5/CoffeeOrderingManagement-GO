@@ -52,8 +52,6 @@ func GetUserPoints(c *gin.Context) {
 	// 构建响应
 	response := models.UserPointsResponse{
 		TotalPoints:     userPoints.TotalPoints,
-		AvailablePoints: userPoints.AvailablePoints,
-		FrozenPoints:    userPoints.FrozenPoints,
 		LifetimePoints:  userPoints.LifetimePoints,
 		MemberLevel:     string(userPoints.MemberLevel),
 		NextLevel:       nextLevel,

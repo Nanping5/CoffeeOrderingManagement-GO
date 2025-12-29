@@ -15,9 +15,7 @@ export const usePointsStore = defineStore('points', () => {
   })
 
   // 计算属性
-  const availablePoints = computed(() => pointsInfo.value?.available_points || 0)
-  const totalPoints = computed(() => pointsInfo.value?.total_points || 0)
-  const frozenPoints = computed(() => pointsInfo.value?.frozen_points || 0)
+  const totalPoints = computed(() => pointsInfo.value?.total_points || 0) // 当前可用积分
   const lifetimePoints = computed(() => pointsInfo.value?.lifetime_points || 0)
   const memberLevel = computed(() => pointsInfo.value?.member_level || 'bronze')
   
@@ -146,9 +144,7 @@ export const usePointsStore = defineStore('points', () => {
     transactions,
     loading,
     pagination,
-    availablePoints,
     totalPoints,
-    frozenPoints,
     lifetimePoints,
     memberLevel,
     memberLevelName,

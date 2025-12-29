@@ -28,7 +28,25 @@ const authAPI = {
 
   // 更新用户资料
   updateProfile(profileData) {
-    return request.put('/user/profile', profileData)
+    // 清理空字符串字段，避免后端解析time.Time失败
+    const cleanedData = {}
+    for (const [key, value] of Object.entries(profileData)) {
+      // 跳过空字符串
+      if (value === '') {
+        continue
+      }
+
+      // 处理 birth_date 字段：将 YYYY-MM-DD 格式转换为 ISO 格式
+      if (key === 'birth_date' && value) {
+        // 确保日期格式正确（YYYY-MM-DD），然后转换为 ISO 格式
+        if (value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          cleanedData[key] = new Date(value + 'T00:00:00+08:00').toISOString()
+        }
+      } else {
+        cleanedData[key] = value
+      }
+    }
+    return request.put('/user/profile', cleanedData)
   },
 
   // 修改密码

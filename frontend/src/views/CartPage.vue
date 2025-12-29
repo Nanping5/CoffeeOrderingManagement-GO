@@ -307,7 +307,7 @@ const handleCheckout = async () => {
     // 后端返回格式：{ success: true, message: '', order: {...} }
     if (response.success && response.order) {
       const order = response.order
-      
+
       // 保存商品信息用于结算成功页面显示
       const orderItemsForDisplay = cartStore.items.map(item => ({
         id: item.id,
@@ -315,13 +315,13 @@ const handleCheckout = async () => {
         price: item.price,
         quantity: item.quantity
       }))
-      
+
       // 清空购物车和积分状态（在跳转前清空）
       cartStore.clearCart()
       usePoints.value = false
       pointsToUse.value = 0
       pointsCalculation.value = null
-      
+
       // 跳转到结算成功页面，传递订单信息和商品列表
       router.push({
         name: 'CheckoutSuccess',
@@ -330,7 +330,9 @@ const handleCheckout = async () => {
           orderNumber: order.order_number,
           pickupCode: order.pickup_code,
           totalPrice: order.final_payment_amount || order.total_price,
-          pointsUsed: order.points_used || 0,
+          originalTotal: order.original_total_price || order.total_price,
+          pointsDeduction: order.points_deduction_amount || 0,
+          pointsUsed: order.points_used || order.customer_points_used || 0,
           pointsEarned: order.estimated_points_earned || order.points_earned || 0,
           items: JSON.stringify(orderItemsForDisplay)
         }

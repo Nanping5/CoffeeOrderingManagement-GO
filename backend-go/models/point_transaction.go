@@ -26,12 +26,9 @@ type PointTransaction struct {
 	PointsChange    int             `gorm:"not null" json:"points_change"`      // 正数为获得，负数为使用
 	PointsBalance   int             `gorm:"not null" json:"points_balance"`     // 变动后余额
 	Description     string          `gorm:"size:255;not null" json:"description"`
-	ReferenceID     string          `gorm:"size:100;index" json:"reference_id"`
-	Metadata        *string         `gorm:"type:json" json:"metadata,omitempty"` // JSON格式额外数据
-	ExpiresAt       *time.Time      `json:"expires_at"`
-	IsActive        bool            `gorm:"default:true;index" json:"is_active"`
 	CreatedAt       time.Time       `gorm:"index" json:"created_at"`
 	UpdatedAt       time.Time       `json:"updated_at"`
+	DeletedAt       *time.Time      `gorm:"index" json:"deleted_at,omitempty"`
 
 	// 关联
 	User  *User  `gorm:"foreignKey:UserID" json:"user,omitempty"`

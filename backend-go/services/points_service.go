@@ -67,13 +67,12 @@ func (s *PointsService) UsePoints(tx *gorm.DB, userID uint, pointsToUse int, ord
 	}
 
 	// 检查可用积分
-	if userPoints.AvailablePoints < pointsToUse {
-		return fmt.Errorf("可用积分不足，当前可用: %d", userPoints.AvailablePoints)
+	if userPoints.TotalPoints < pointsToUse {
+		return fmt.Errorf("可用积分不足，当前可用: %d", userPoints.TotalPoints)
 	}
 
 	// 扣减积分
 	userPoints.TotalPoints -= pointsToUse
-	userPoints.AvailablePoints -= pointsToUse
 
 	if err := tx.Save(&userPoints).Error; err != nil {
 		return errors.New("积分扣减失败")
@@ -87,7 +86,6 @@ func (s *PointsService) UsePoints(tx *gorm.DB, userID uint, pointsToUse int, ord
 		PointsChange:    -pointsToUse,
 		PointsBalance:   userPoints.TotalPoints,
 		Description:     description,
-		IsActive:        true,
 	}
 
 	if err := tx.Create(&transaction).Error; err != nil {
@@ -107,26 +105,14 @@ func (s *PointsService) EarnPoints(tx *gorm.DB, userID uint, pointsToEarn int, o
 
 	// 增加积分
 	userPoints.TotalPoints += pointsToEarn
-	userPoints.AvailablePoints += pointsToEarn
 	userPoints.LifetimePoints += pointsToEarn
 
 	// 检查是否需要升级会员等级
 	newLevel := s.CalculateMemberLevel(userPoints.LifetimePoints)
 	if newLevel != userPoints.MemberLevel {
-		oldLevel := userPoints.MemberLevel
 		userPoints.MemberLevel = newLevel
 		now := time.Now()
 		userPoints.LevelUpgradeDate = &now
-
-		// 记录等级升级
-		levelHistory := models.MemberLevelHistory{
-			UserID:          userID,
-			FromLevel:       &oldLevel,
-			ToLevel:         newLevel,
-			PointsAtUpgrade: userPoints.LifetimePoints,
-			UpgradeReason:   "积分累积升级",
-		}
-		tx.Create(&levelHistory)
 	}
 
 	if err := tx.Save(&userPoints).Error; err != nil {
@@ -134,7 +120,6 @@ func (s *PointsService) EarnPoints(tx *gorm.DB, userID uint, pointsToEarn int, o
 	}
 
 	// 记录积分变动
-	expiresAt := time.Now().AddDate(1, 0, 0) // 1年后过期
 	transaction := models.PointTransaction{
 		UserID:          userID,
 		OrderID:         orderID,
@@ -142,8 +127,6 @@ func (s *PointsService) EarnPoints(tx *gorm.DB, userID uint, pointsToEarn int, o
 		PointsChange:    pointsToEarn,
 		PointsBalance:   userPoints.TotalPoints,
 		Description:     description,
-		ExpiresAt:       &expiresAt,
-		IsActive:        true,
 	}
 
 	if err := tx.Create(&transaction).Error; err != nil {

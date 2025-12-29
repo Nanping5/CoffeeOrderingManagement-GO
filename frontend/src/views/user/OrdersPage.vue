@@ -60,7 +60,7 @@
               </span>
             </div>
             <div class="order-total">
-              共 {{ order.item_count }} 件，实付 <span class="price">¥{{ order.total_price?.toFixed(2) }}</span>
+              共 {{ order.item_count }} 件，实付 <span class="price">¥{{ order.final_payment_amount?.toFixed(2) || order.total_price?.toFixed(2) }}</span>
             </div>
           </div>
         </el-card>

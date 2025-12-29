@@ -86,7 +86,7 @@ func CreateOrder(c *gin.Context) {
 	if req.UsePoints && req.PointsToUse > 0 && userPoints != nil {
 		pointsService := services.NewPointsService()
 		discount, err := pointsService.CalculatePointsDiscount(req.PointsToUse, memberLevel, originalTotal)
-		if err == nil && userPoints.AvailablePoints >= req.PointsToUse {
+		if err == nil && userPoints.TotalPoints >= req.PointsToUse {
 			pointsDeduction = discount
 			pointsUsed = req.PointsToUse
 			finalPayment = originalTotal - pointsDeduction
@@ -98,11 +98,8 @@ func CreateOrder(c *gin.Context) {
 		UserID:                userIDPtr,
 		OrderNumber:           orderNumber,
 		PickupCode:            pickupCode,
-		TotalPrice:            finalPayment,
-		OriginalTotalPrice:    originalTotal,
 		CustomerPointsUsed:    pointsUsed,
 		PointsDeductionAmount: pointsDeduction,
-		FinalPaymentAmount:    finalPayment,
 		MemberLevelAtTime:     &memberLevel,
 		Notes:                 req.Notes,
 		Status:                models.OrderStatusPending,
@@ -139,7 +136,6 @@ func CreateOrder(c *gin.Context) {
 			MenuID:    item.MenuID,
 			Quantity:  item.Quantity,
 			UnitPrice: unitPrice,
-			Subtotal:  float64(item.Quantity) * unitPrice,
 		}
 
 		if err := tx.Create(&orderItem).Error; err != nil {
@@ -219,30 +215,38 @@ func GetOrder(c *gin.Context) {
 		return
 	}
 
-	// 格式化订单项
+	// 格式化订单项并计算总价
 	orderItems := make([]gin.H, 0)
+	totalPrice := 0.0
 	for _, item := range order.OrderItems {
+		subtotal := item.GetSubtotal()
+		totalPrice += subtotal
 		orderItems = append(orderItems, gin.H{
 			"id":         item.ID,
 			"menu_id":    item.MenuID,
 			"menu_name":  item.MenuItem.Name,
 			"quantity":   item.Quantity,
 			"unit_price": item.UnitPrice,
-			"subtotal":   item.Subtotal,
+			"subtotal":   subtotal,
 		})
 	}
+
+	// 计算最终支付金额（扣除积分抵扣）
+	finalPrice := totalPrice - order.PointsDeductionAmount
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"order": gin.H{
-			"id":           order.ID,
-			"order_number": order.OrderNumber,
-			"pickup_code":  order.PickupCode,
-			"total_price":  order.TotalPrice,
-			"status":       order.Status,
-			"notes":        order.Notes,
-			"items":        orderItems,
-			"created_at":   order.CreatedAt,
+			"id":                      order.ID,
+			"order_number":            order.OrderNumber,
+			"pickup_code":             order.PickupCode,
+			"original_total_price":    totalPrice,
+			"points_deduction_amount": order.PointsDeductionAmount,
+			"final_payment_amount":    finalPrice,
+			"status":                  order.Status,
+			"notes":                   order.Notes,
+			"items":                   orderItems,
+			"created_at":              order.CreatedAt,
 		},
 	})
 }
@@ -262,30 +266,38 @@ func GetOrderByPickupCode(c *gin.Context) {
 		return
 	}
 
-	// 格式化订单项
+	// 格式化订单项并计算总价
 	orderItems := make([]gin.H, 0)
+	totalPrice := 0.0
 	for _, item := range order.OrderItems {
+		subtotal := item.GetSubtotal()
+		totalPrice += subtotal
 		orderItems = append(orderItems, gin.H{
 			"id":         item.ID,
 			"menu_id":    item.MenuID,
 			"menu_name":  item.MenuItem.Name,
 			"quantity":   item.Quantity,
 			"unit_price": item.UnitPrice,
-			"subtotal":   item.Subtotal,
+			"subtotal":   subtotal,
 		})
 	}
+
+	// 计算最终支付金额（扣除积分抵扣）
+	finalPrice := totalPrice - order.PointsDeductionAmount
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"order": gin.H{
-			"id":           order.ID,
-			"order_number": order.OrderNumber,
-			"pickup_code":  order.PickupCode,
-			"total_price":  order.TotalPrice,
-			"status":       order.Status,
-			"notes":        order.Notes,
-			"items":        orderItems,
-			"created_at":   order.CreatedAt,
+			"id":                      order.ID,
+			"order_number":            order.OrderNumber,
+			"pickup_code":             order.PickupCode,
+			"original_total_price":    totalPrice,
+			"points_deduction_amount": order.PointsDeductionAmount,
+			"final_payment_amount":    finalPrice,
+			"status":                  order.Status,
+			"notes":                   order.Notes,
+			"items":                   orderItems,
+			"created_at":              order.CreatedAt,
 		},
 	})
 }
@@ -353,7 +365,7 @@ func CalculatePointsForOrder(c *gin.Context) {
 	pointsService := services.NewPointsService()
 
 	// 获取最大可用积分
-	maxUsablePoints, _ := pointsService.GetMaxUsablePoints(originalTotal, userPoints.MemberLevel, userPoints.AvailablePoints)
+	maxUsablePoints, _ := pointsService.GetMaxUsablePoints(originalTotal, userPoints.MemberLevel, userPoints.TotalPoints)
 
 	// 计算积分抵扣
 	pointsToUse := req.PointsToUse
@@ -380,8 +392,8 @@ func CalculatePointsForOrder(c *gin.Context) {
 			"points_value":            pointsValue,
 			"final_total":             finalTotal,
 			"estimated_points_earned": estimatedPointsEarned,
-			"user_points_balance":     userPoints.AvailablePoints,
-			"points_after_usage":      userPoints.AvailablePoints - pointsToUse,
+			"user_points_balance":     userPoints.TotalPoints,
+			"points_after_usage":      userPoints.TotalPoints - pointsToUse,
 		},
 	})
 }

@@ -25,7 +25,6 @@ CREATE TABLE users (
     birth_date DATE,
     is_verified BOOLEAN DEFAULT FALSE,
     is_active BOOLEAN DEFAULT TRUE,
-    last_login_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
@@ -59,23 +58,22 @@ CREATE TABLE menu_items (
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
+    order_number VARCHAR(50) NOT NULL UNIQUE,
     pickup_code VARCHAR(10) NOT NULL,
-    total_price DECIMAL(10,2) NOT NULL,
     status ENUM('pending', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
     customer_name VARCHAR(100),
     customer_phone VARCHAR(20),
     notes TEXT,
-    customer_points_used INT DEFAULT 0,
-    points_deduction_amount DECIMAL(10,2) DEFAULT 0.00,
-    points_earned INT DEFAULT 0,
-    original_total_price DECIMAL(10,2),
-    final_payment_amount DECIMAL(10,2),
-    member_level_at_time ENUM('bronze','silver','gold','platinum'),
+    customer_points_used INT DEFAULT 0 COMMENT '使用的积分数量',
+    points_deduction_amount DECIMAL(10,2) DEFAULT 0.00 COMMENT '积分抵扣金额',
+    points_earned INT DEFAULT 0 COMMENT '订单完成后获得的积分',
+    member_level_at_time ENUM('bronze','silver','gold','platinum') COMMENT '下单时会员等级',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_user_id (user_id),
     INDEX idx_status (status),
     INDEX idx_pickup_code (pickup_code),
+    INDEX idx_order_number (order_number),
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -87,8 +85,7 @@ CREATE TABLE order_items (
     order_id INT NOT NULL,
     menu_item_id INT NOT NULL,
     quantity INT NOT NULL,
-    unit_price DECIMAL(10,2) NOT NULL,
-    subtotal DECIMAL(10,2) NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL COMMENT '下单时商品单价（历史快照）',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (menu_item_id) REFERENCES menu_items(id) ON DELETE RESTRICT,
@@ -102,12 +99,10 @@ CREATE TABLE order_items (
 CREATE TABLE user_points (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
-    total_points INT DEFAULT 0,
-    available_points INT DEFAULT 0,
-    frozen_points INT DEFAULT 0,
-    lifetime_points INT DEFAULT 0,
+    total_points INT DEFAULT 0 COMMENT '当前可用积分',
+    lifetime_points INT DEFAULT 0 COMMENT '历史累计积分（用于等级升级）',
     member_level ENUM('bronze', 'silver', 'gold', 'platinum') DEFAULT 'bronze',
-    level_upgrade_date TIMESTAMP NULL,
+    level_upgrade_date TIMESTAMP NULL COMMENT '最近一次等级升级时间',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -123,13 +118,9 @@ CREATE TABLE point_transactions (
     user_id INT NOT NULL,
     order_id INT NULL,
     transaction_type ENUM('earned', 'used', 'expired', 'refunded', 'signup_bonus', 'birthday_bonus', 'referral_bonus') NOT NULL,
-    points_change INT NOT NULL,
-    points_balance INT NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    reference_id VARCHAR(100),
-    metadata JSON,
-    expires_at TIMESTAMP NULL,
-    is_active BOOLEAN DEFAULT TRUE,
+    points_change INT NOT NULL COMMENT '积分变动（正负数）',
+    points_balance INT NOT NULL COMMENT '变动后余额',
+    description VARCHAR(255) NOT NULL COMMENT '变动描述',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
@@ -206,8 +197,8 @@ CREATE TRIGGER after_user_insert
 AFTER INSERT ON users
 FOR EACH ROW
 BEGIN
-    INSERT INTO user_points (user_id, total_points, available_points, frozen_points, lifetime_points, member_level)
-    VALUES (NEW.id, 0, 0, 0, 0, 'bronze');
+    INSERT INTO user_points (user_id, total_points, lifetime_points, member_level)
+    VALUES (NEW.id, 0, 0, 'bronze');
 END //
 DELIMITER ;
 
