@@ -97,12 +97,12 @@
         </div>
 
         <!-- 积分抵扣区域 -->
-        <div v-if="authStore.isAuthenticated && !authStore.isAdmin && pointsStore.availablePoints > 0" class="points-section">
+        <div v-if="authStore.isAuthenticated && !authStore.isAdmin && pointsStore.totalPoints > 0" class="points-section">
           <div class="points-header">
             <el-switch v-model="usePoints" active-text="使用积分抵扣" />
             <span class="points-balance">
               <el-icon><Coin /></el-icon>
-              可用: {{ pointsStore.availablePoints }}
+              可用: {{ pointsStore.totalPoints }}
             </span>
           </div>
           
@@ -362,7 +362,7 @@ const goToMenu = () => {
 // 积分相关计算
 const maxUsablePoints = computed(() => {
   if (!pointsCalculation.value) return 0
-  return Math.min(pointsStore.availablePoints, pointsCalculation.value.max_usable_points || 0)
+  return Math.min(pointsStore.totalPoints, pointsCalculation.value.max_usable_points || 0)
 })
 
 const pointsDiscount = computed(() => {
@@ -433,7 +433,7 @@ onMounted(async () => {
   if (authStore.isAuthenticated && !authStore.isAdmin) {
     await pointsStore.fetchPointsInfo()
     // 如果有积分且购物车有商品，自动计算积分抵扣
-    if (pointsStore.availablePoints > 0 && cartStore.items.length > 0) {
+    if (pointsStore.totalPoints > 0 && cartStore.items.length > 0) {
       await calculatePointsDiscount()
       // 自动设置使用最大可用积分
       if (pointsCalculation.value) {

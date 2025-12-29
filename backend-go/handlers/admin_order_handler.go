@@ -202,11 +202,12 @@ func GetOrderStatistics(c *gin.Context) {
 		statusMap[sc.Status] = sc.Count
 	}
 
-	// 总收入（所有非取消订单）
+	// 总收入（所有非取消订单）- 通过order_items动态计算
 	var totalRevenue float64
-	db.Model(&models.Order{}).
-		Where("status != ?", "cancelled").
-		Select("COALESCE(SUM(total_price), 0)").
+	db.Table("orders").
+		Joins("INNER JOIN order_items ON orders.id = order_items.order_id").
+		Where("orders.status != ?", "cancelled").
+		Select("COALESCE(SUM(order_items.quantity * order_items.unit_price), 0)").
 		Scan(&totalRevenue)
 
 	// 今日订单数
@@ -216,11 +217,12 @@ func GetOrderStatistics(c *gin.Context) {
 		Where("created_at >= ?", today).
 		Count(&todayOrders)
 
-	// 今日收入（所有非取消订单）
+	// 今日收入（所有非取消订单）- 通过order_items动态计算
 	var todayRevenue float64
-	db.Model(&models.Order{}).
-		Where("status != ? AND created_at >= ?", "cancelled", today).
-		Select("COALESCE(SUM(total_price), 0)").
+	db.Table("orders").
+		Joins("INNER JOIN order_items ON orders.id = order_items.order_id").
+		Where("orders.status != ? AND orders.created_at >= ?", "cancelled", today).
+		Select("COALESCE(SUM(order_items.quantity * order_items.unit_price), 0)").
 		Scan(&todayRevenue)
 
 	// 会员统计
@@ -251,7 +253,7 @@ func GetOrderStatistics(c *gin.Context) {
 	}
 	var topProducts []TopProduct
 	db.Table("order_items").
-		Select("order_items.menu_item_id, menu_items.name as menu_name, SUM(order_items.quantity) as quantity, SUM(order_items.subtotal) as revenue").
+		Select("order_items.menu_item_id, menu_items.name as menu_name, SUM(order_items.quantity) as quantity, SUM(order_items.quantity * order_items.unit_price) as revenue").
 		Joins("LEFT JOIN menu_items ON order_items.menu_item_id = menu_items.id").
 		Group("order_items.menu_item_id, menu_items.name").
 		Order("quantity DESC").
@@ -266,10 +268,11 @@ func GetOrderStatistics(c *gin.Context) {
 	}
 	var dailyOrders []DailyOrder
 	sevenDaysAgo := time.Now().AddDate(0, 0, -6).Truncate(24 * time.Hour)
-	db.Model(&models.Order{}).
-		Select("DATE(created_at) as date, COUNT(*) as count, COALESCE(SUM(total_price), 0) as revenue").
-		Where("created_at >= ?", sevenDaysAgo).
-		Group("DATE(created_at)").
+	db.Table("orders").
+		Select("DATE(orders.created_at) as date, COUNT(*) as count, COALESCE(SUM(order_items.quantity * order_items.unit_price), 0) as revenue").
+		Joins("INNER JOIN order_items ON orders.id = order_items.order_id").
+		Where("orders.created_at >= ?", sevenDaysAgo).
+		Group("DATE(orders.created_at)").
 		Order("date ASC").
 		Scan(&dailyOrders)
 
